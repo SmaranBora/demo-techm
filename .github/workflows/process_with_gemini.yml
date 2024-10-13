@@ -3,7 +3,7 @@ name: Process Code with Gemini
 on:
   push:
     branches:
-      - main  # Change this to your main branch if different
+      - main  # Change to your main branch if needed
 
 jobs:
   process:
@@ -19,22 +19,21 @@ jobs:
           node-version: '14'  # Use your required Node.js version
 
       - name: Install Dependencies
-        run: npm install  # Adjust based on your project
+        run: npm install  # Run this if you have any dependencies (adjust accordingly)
 
-      - name: Process Code with Gemini
+      - name: Process Code with Gemini Logic
         run: |
-          # Replace this command with your actual command to process code using Gemini
-          gemini process --input=path/to/your/code --output=path/to/processed/code
+          # Replace 'inputFile.js' and 'outputFile.js' with your actual file names
+          node geminiLogic.js path/to/your/code/inputFile.js path/to/processed/code/outputFile.js
 
-      - name: Create a new branch
+      - name: Create a new branch and push changes
         run: |
           # Get the current commit hash
           GIT_COMMIT_HASH=$(git rev-parse HEAD)
-          # Create a new branch (use your desired branch name)
+          # Create a new branch name
           NEW_BRANCH="processed-code-${GIT_COMMIT_HASH}"
           git checkout -b $NEW_BRANCH
-          # Add the processed code
-          git add path/to/processed/code
+          # Add the processed file to the new branch
+          git add path/to/processed/code/outputFile.js  # Update this based on your output
           git commit -m "Add processed code from Gemini"
-          # Push the new branch to GitHub
           git push origin $NEW_BRANCH
