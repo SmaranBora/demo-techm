@@ -1,58 +1,40 @@
-name: Process Code with Gemini API
+name: Process Code with Gemini
 
 on:
   push:
     branches:
-      - main  # Trigger the workflow when code is pushed to the 'main' branch
+      - main  # Change this to your main branch if different
 
 jobs:
-  gemini_process:
+  process:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Check out the latest code from the repository
+      - name: Checkout the code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.9'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Use your required Node.js version
 
-    - name: Install dependencies
-      run: |
-        pip install requests  # Install requests for API calls
+      - name: Install Dependencies
+        run: npm install  # Adjust based on your project
 
-    - name: Extract commit message
-      id: get_commit_message
-      run: |
-        # Extract the commit message for the push event
-        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-        echo "PROMPT=$COMMIT_MESSAGE" >> $GITHUB_ENV  # Store commit message as the prompt
+      - name: Process Code with Gemini
+        run: |
+          # Replace this command with your actual command to process code using Gemini
+          gemini process --input=path/to/your/code --output=path/to/processed/code
 
-    - name: Send code to Gemini API for processing
-      run: |
-        # Send the code and commit message as the prompt to the Gemini API
-        CODE=$(cat $(git ls-files))  # Collect code files as a string
-        curl -X POST "${{ secrets.GEMINI_API_URL }}" \
-          -H "Authorization: Bearer ${{ secrets.GEMINI_API_KEY }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-                "code": "'"$CODE"'",
-                "prompt": "'"${{ env.PROMPT }}"'"
-              }' \
-          -o processed_code.zip
-
-    - name: Unzip processed code
-      run: |
-        # Unzip the processed code returned by the Gemini API
-        unzip processed_code.zip -d processed_output
-
-    - name: Commit and push processed code to a new branch
-      run: |
-        # Create a new branch and commit the processed code
-        git checkout -b gemini-processed-branch  # Create a new branch
-        cp -r processed_output/* .  # Copy the processed files
-        git add .  # Add all changes
-        git commit -m "Processed code with Gemini API"  # Commit the changes
-        git push origin gemini-processed-branch  # Push to the new branch
-
+      - name: Create a new branch
+        run: |
+          # Get the current commit hash
+          GIT_COMMIT_HASH=$(git rev-parse HEAD)
+          # Create a new branch (use your desired branch name)
+          NEW_BRANCH="processed-code-${GIT_COMMIT_HASH}"
+          git checkout -b $NEW_BRANCH
+          # Add the processed code
+          git add path/to/processed/code
+          git commit -m "Add processed code from Gemini"
+          # Push the new branch to GitHub
+          git push origin $NEW_BRANCH
