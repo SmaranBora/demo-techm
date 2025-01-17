@@ -1,0 +1,27 @@
+scoring for banking methodlogy based on their jurisdiction change parameters we advise using gen ai acc to green loan principles
+product deployed with companies requiring green loan
+help companies get the green loan
+DLC from hugging face
+import onto bedrock market place
+generate synthetic data
+
+borrowe ka input stored in db then this data would be input to the llm
+
+borrowers while filling form they use llm to assist the borrower to fill the form 
+data in structured excel format
+listed out the certifications for each industry
+asking user(borrower) to input the certifications and will also need to submit the project plan to show the breakup of the spend which would be unstructured which we need to extract which would be used and the the llm should predict where the synthetic data would used for training
+
+
+based on green principles using esg scoring like financials
+user will also push invoices
+knowledge base use embedding models convert excel to vector db
+when the form is filling hit the vector database keep it as cache and then if you dont get any data use llm
+
+for the plan part:use printed for now , 
+
+
+
+
+may give suggestion upfront this loan  may not get approved because of this this reason 
+	
